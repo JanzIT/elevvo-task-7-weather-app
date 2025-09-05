@@ -1,0 +1,17 @@
+{
+  "name": "Lisboa",
+  "main": {
+    "temp": 23.58,
+    "feels_like": 23.87,
+    "humidity": 72
+  },
+  "weather": [
+    {
+      "description": "céu pouco nublado",
+      "icon": "02d"
+    }
+  ],
+  "wind": {
+    "speed": 4.63
+  }
+}

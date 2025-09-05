@@ -1,10 +1,17 @@
-import { useState } from "react";
 import "./App.css";
-
+import WeatherCard from "./components/WeatherCard";
+import mockWeatherData from "./assets/mockWeatherData.json";
+import WeatherDashboard from "./components/weatherDashboard";
 function App() {
-  const [count, setCount] = useState(0);
+  const handleCardClick = (data) => {
+    console.log("Card clicado:", data.name);
+  };
 
-  return (<h1></h1>), (<h1></h1>);
+  return (
+    <div className="App">
+      <WeatherDashboard />
+    </div>
+  );
 }
 
 export default App;
