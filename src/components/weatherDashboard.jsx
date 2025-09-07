@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import WeatherCard from "./WeatherCard";
 import ForecastSection from "./ForecastSection";
+import { SearchBar } from "./SearchBar";
 
 export default function WeatherDashboard() {
   const [weatherDataList, setWeatherDataList] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const API_KEY = "d5038b83e270e2aec7096b7377b08cc5";
 
@@ -34,6 +36,36 @@ export default function WeatherDashboard() {
       console.error("Erro ao buscar cidades próximas:", error);
       return [];
     }
+  };
+
+  // Nova função para buscar cidade por nome
+  const searchCity = async (cityName) => {
+    setSearchLoading(true);
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${API_KEY}&units=metric&lang=pt_br`
+      );
+      const cityData = await response.json();
+
+      if (response.ok) {
+        // Verifica se a cidade já existe na lista
+        const cityExists = weatherDataList.some(
+          (city) => city.id === cityData.id
+        );
+        if (!cityExists) {
+          setWeatherDataList((prev) => [cityData, ...prev]);
+        }
+        setSelectedCity(cityData.name);
+      } else {
+        alert(
+          `Cidade "${cityName}" não encontrada. Verifique o nome e tente novamente.`
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao buscar cidade:", error);
+      alert("Erro ao buscar cidade. Tente novamente.");
+    }
+    setSearchLoading(false);
   };
 
   useEffect(() => {
@@ -108,6 +140,9 @@ export default function WeatherDashboard() {
   return (
     <div className="dashboard-container">
       <h1>Weather Dashboard</h1>
+
+      {/* SearchBar componente */}
+      <SearchBar onCitySearch={searchCity} isLoading={searchLoading} />
 
       {loading ? (
         <p>Carregando dados...</p>
